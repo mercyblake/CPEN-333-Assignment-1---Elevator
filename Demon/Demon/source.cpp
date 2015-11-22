@@ -5,10 +5,9 @@
 //-------===---===---===---|-----|---|----------------------------------------------------------------------------
 //DISPATCHER...
 
-//Pipeline bug.
 
 #include <stdio.h>
-#include "..\..\..\rt.h"
+#include "..\..\..\..\RTExample\rt.h"
 #include "dispatcher.h"
 #include <stdlib.h>
 
@@ -27,16 +26,7 @@ static const int NO_DESTINATION =	11 ;
 static const int eleCount =	2;
 
 //INIT: struct DP: int floor, int direction, int floors[10]
-struct 	mydatapooldata 	{	// start of structure template
-		int floor ;			// floor corresponding to lifts current position
-		int usage;
-		int door;			
-		int direction ;		// direction of travel of lift
-		int floors[10] ;	// an array representing the floors and whether requests are set 
-		int lights[10] ;
-		int updir[10];
-		int downdir[10];
-} ;							// end of structure template
+
 
 int	flag = 1;
 
@@ -49,7 +39,7 @@ CRendezvous r1("StartRendezvous", 4); //global rendezvous for starting all 4 thr
 CRendezvous r2("EndRendezvous", 4); // global rendezvous for ending all 4 threads at the same time.
 
 //INIT: SEMAPHORES - NEEDS REWRITING (generic)
-CSemaphore		ps2("PS2", 0, 1) ;    // semaphore with initial value 0 and max value 1
+CSemaphore		ps2("PS2", 0, 1) ;    // semaphore with initial value 0 and max value 1. What is the purpose of initial value?
 CSemaphore		cs2("CS2", 1, 1) ;    // semaphore with initial value 1 and max value 1
 CSemaphore		ps4("PS4", 0, 1) ;    // semaphore with initial value 0 and max value 1
 CSemaphore		cs4("CS4", 1, 1) ;    // semaphore with initial value 1 and max value 1
@@ -163,19 +153,19 @@ int main(void) {
 
 
 	// INIT: PROCESS 3x: IO, Ele1, Ele2
-	CProcess pio("C:\\Take\\Y3\\Training\\ex4\\Assignment1\\Demon\\Debug\\ElevatorIO.exe",	// pathlist to child program executable				
+	CProcess pio("T:\\Take\\Y4\\CPEN 333\\Assignment 1 - Elevator\\CPEN-333-Assignment-1---Elevator\\Demon\\Debug\\ElevatorIO.exe",	// pathlist to child program executable				
 			NORMAL_PRIORITY_CLASS,			// priority
 			OWN_WINDOW,						// process has its own window					
 			ACTIVE						// process is active immediately
 	);
 	
-	CProcess p1("C:\\Take\\Y3\\Training\\ex4\\Assignment1\\Demon\\Debug\\Otis1.exe",	// pathlist to child program executable				
+	CProcess p1("T:\\Take\\Y4\\CPEN 333\\Assignment 1 - Elevator\\CPEN-333-Assignment-1---Elevator\\Demon\\Debug\\Otis1.exe",	// pathlist to child program executable				
 			NORMAL_PRIORITY_CLASS,			// priority
 			OWN_WINDOW,						// process has its own window					
 			ACTIVE							// process is active immediately
 	);
 
-	CProcess p2("C:\\Take\\Y3\\Training\\ex4\\Assignment1\\Demon\\Debug\\Otis2.exe",	// pathlist to child program executable				
+	CProcess p2("T:\\Take\\Y4\\CPEN 333\\Assignment 1 - Elevator\\CPEN-333-Assignment-1---Elevator\\Demon\\Debug\\Otis2.exe",	// pathlist to child program executable				
 			NORMAL_PRIORITY_CLASS,			// priority
 			OWN_WINDOW,						// process has its own window					
 			ACTIVE							// process is active immediately

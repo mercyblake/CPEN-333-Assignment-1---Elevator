@@ -1,5 +1,5 @@
 #include 	<stdio.h>
-#include "..\..\..\rt.h"
+#include "..\..\..\..\RTExample\rt.h"
 
 static const int STOPPED =	0	;
 static const int UP	=		1	;
@@ -758,7 +758,7 @@ UINT __stdcall IOToElevator2(void *args)
 		m1->Signal();
 
 
-		SLEEP(10);
+		SLEEP(1);
 	}
 	return 0 ;									
 }

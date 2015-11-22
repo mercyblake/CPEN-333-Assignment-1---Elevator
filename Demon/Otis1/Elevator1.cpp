@@ -1,5 +1,5 @@
 #include 	<stdio.h>
-#include "..\..\..\rt.h"
+#include "..\..\..\..\RTExample\rt.h"
 
 //#assignflag, semaphores, (additional rendezvous), 3x new pipes, eleCount
 //#faultrank.

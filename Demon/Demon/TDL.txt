@@ -1,0 +1,16 @@
+TDL:
+
+@@CRITICAL
+
+Create function for printing line in ElevatorIO.
+Fix Erasing bug for elevator.
+Improve modularity of code.
+Add third elevator.
+Edit command ee to specifications.
+
+
+
+@@Non-Critical
+
+Finish comment graphics!:D
+

@@ -74,11 +74,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\rt.cpp" />
+    <ClCompile Include="..\..\..\..\RTExample\rt.cpp" />
     <ClCompile Include="Elevator2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\rt.h" />
+    <ClInclude Include="..\..\..\..\RTExample\rt.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

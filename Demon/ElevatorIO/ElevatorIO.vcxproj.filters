@@ -18,12 +18,12 @@
     <ClCompile Include="ElevatorIO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\rt.cpp">
+    <ClCompile Include="..\..\..\..\RTExample\rt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\rt.h">
+    <ClInclude Include="..\..\..\..\RTExample\rt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

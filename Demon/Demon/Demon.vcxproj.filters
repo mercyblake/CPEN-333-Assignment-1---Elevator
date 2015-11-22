@@ -18,7 +18,7 @@
     <ClCompile Include="source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\rt.cpp">
+    <ClCompile Include="..\..\..\..\RTExample\rt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dispatcher.cpp">
@@ -26,11 +26,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\rt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="dispatcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\RTExample\rt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TDL.txt">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
