@@ -1,16 +1,21 @@
-TDL:
+TDL (Starting Nov ):
 
 @@CRITICAL
 
-Create function for printing line in ElevatorIO.
-Fix Erasing bug for elevator.
+1) consider applying a file with globals for all variables.
+	Nov-25
+2) Fix erasing bug for elevator.
+3) Create function for printing line in ElevatorIO.
+4) Include direction recognition.
 Improve modularity of code.
 Add third elevator.
 Edit command ee to specifications.
-
-
+Test for multiple destination input.
+Rename projects - USE I/O as main project.
+Include Mutual Exclusion for accessing global variable by multiple threads.
 
 @@Non-Critical
 
+Flashing forstuff other than Floor Number.
 Finish comment graphics!:D
 

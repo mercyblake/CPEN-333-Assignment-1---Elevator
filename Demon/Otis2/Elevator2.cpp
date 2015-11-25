@@ -1,31 +1,6 @@
-#include 	<stdio.h>
+#include <stdio.h>
 #include "..\..\..\..\RTExample\rt.h"
-
-
-
-static const int STOPPED =	0	;
-static const int UP	=		1	;
-static const int DOWN =		2	;
-
-static const int NOTUSED =	0	;
-static const int USING =	1	;
-
-static const int CLOSED	=	0	;
-static const int OPEN =		1	;
-
-static const int NO_DESTINATION =	11 ;
-
-
-struct 	mydatapooldata 	{	// start of structure template
-		int floor ;			// floor corresponding to lifts current position
-		int usage;
-		int door;			
-		int direction ;		// direction of travel of lift
-		int floors[10] ;	// an array representing the floors and whether requests are set 
-		int lights[10] ;
-		int updir[10];
-		int downdir[10];
-} ;							// end of structure template
+#include "..\Demon\elevator.h"
 
 
 CRendezvous r1("StartRendezvous", 4);
@@ -51,10 +26,10 @@ int main(){
 	int updateDP = 1;
 	int flag = 1;
 
-	CDataPool dp("Ele2", sizeof(struct mydatapooldata)) ;	
-	struct mydatapooldata 	 *MyDataPool = (struct mydatapooldata *)(dp.LinkDataPool()) ;
+	CDataPool dp("Ele2", sizeof(struct myDpData)) ;	
+	struct myDpData 	 *MyDataPool = (struct myDpData *)(dp.LinkDataPool()) ;
 	
-	struct mydatapooldata elevator;
+	struct myDpData elevator;
 	elevator.floor = 1;
 	elevator.usage = NOTUSED;
 	elevator.door = CLOSED;

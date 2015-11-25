@@ -1,31 +1,10 @@
 #include 	<stdio.h>
 #include "..\..\..\..\RTExample\rt.h"
+#include "..\Demon\elevator.h"
 
 //#assignflag, semaphores, (additional rendezvous), 3x new pipes, eleCount
 //#faultrank.
-static const int STOPPED =	0	;
-static const int UP	=		1	;
-static const int DOWN =		2	;
-
-static const int NOTUSED =	0	;
-static const int USING =	1	;
-
-static const int CLOSED	=	0	;
-static const int OPEN =		1	;
-
-static const int NO_DESTINATION =	11 ;
-
-struct 	mydatapooldata 	{	// start of structure template
-		int floor ;			// floor corresponding to lifts current position
-		int usage;
-		int door;			
-		int direction ;		// direction of travel of lift
-		int floors[10] ;	// an array representing the floors and whether requests are set 
-		int lights[10] ;
-		int updir[10];
-		int downdir[10];
-} ;							// end of structure template
-
+// end of structure template
 
 
 CSemaphore		ps1("PS1", 0, 1) ;    // semaphore with initial value 0 and max value 1
@@ -48,7 +27,7 @@ int main(){
 	int updateDP = 1;
 	int flag = 1;
 	
-	struct mydatapooldata elevator;
+	struct myDpData elevator;
 	elevator.floor = 1;
 	elevator.usage = NOTUSED;
 	elevator.door = CLOSED;
@@ -66,8 +45,8 @@ int main(){
 		elevator.downdir[i] = 0;
 	}
 
-	CDataPool dp("Ele1", sizeof(struct mydatapooldata)) ;
-	struct mydatapooldata	 *MyDataPool = (struct mydatapooldata *)(dp.LinkDataPool()) ;
+	CDataPool dp("Ele1", sizeof(struct myDpData)) ;
+	struct myDpData	 *MyDataPool = (struct myDpData *)(dp.LinkDataPool()) ;
 
 	CPipe	pEle1	("PipeDispatcherToElevator1", 1024) ;
 	CPipe	pEle1_1	("PipeDispatcherToElevator1_1", 1024) ; //only used for lights

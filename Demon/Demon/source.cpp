@@ -7,126 +7,28 @@
 
 
 #include <stdio.h>
-#include "..\..\..\..\RTExample\rt.h"
+
+/* dispatcher.h
+ * Include the two threads for collecting information from datapool, and a printscreen fxn.
+ *
+ *
+*/
 #include "dispatcher.h"
 #include <stdlib.h>
 
-static const int STOPPED =	0	;
-static const int UP	=		1	;
-static const int DOWN =		2	;
-
-static const int NOTUSED =	0	;
-static const int USING =	1	;
-
-static const int CLOSED	=	0	;
-static const int OPEN =		1	;
-
-static const int NO_DESTINATION =	11 ;
-
-static const int eleCount =	2;
-
-//INIT: struct DP: int floor, int direction, int floors[10]
-
-
-int	flag = 1;
-
-mydatapooldata ele[eleCount];
-int eleStatus[eleCount];
-struct mydatapooldata ele1, ele2;
-
-//GLOBAL VAR: CRendezvous
-CRendezvous r1("StartRendezvous", 4); //global rendezvous for starting all 4 threads at the same time.
-CRendezvous r2("EndRendezvous", 4); // global rendezvous for ending all 4 threads at the same time.
-
-//INIT: SEMAPHORES - NEEDS REWRITING (generic)
-CSemaphore		ps2("PS2", 0, 1) ;    // semaphore with initial value 0 and max value 1. What is the purpose of initial value?
-CSemaphore		cs2("CS2", 1, 1) ;    // semaphore with initial value 1 and max value 1
-CSemaphore		ps4("PS4", 0, 1) ;    // semaphore with initial value 0 and max value 1
-CSemaphore		cs4("CS4", 1, 1) ;    // semaphore with initial value 1 and max value 1
-
-//need gatekeeper for the dp.
-
-UINT __stdcall DispatcherToElevator1(void *args)			
-{
-	
-
-	CDataPool	dp1("Ele1", sizeof(struct mydatapooldata)) ;
-	struct		mydatapooldata *Ele1DP = (struct mydatapooldata *)(dp1.LinkDataPool());
-
-	while(flag) {	
-		if (ps2.Read()>0) {
-			ps2.Wait();
-
-			ele[0] = *Ele1DP;
-
-			cs2.Signal();
-		}
-		Sleep(5);
-	}
-	return 0 ;									
-}
-
-UINT __stdcall DispatcherToElevator2(void *args)			
-{
-	CDataPool	dp2("Ele2", sizeof(struct mydatapooldata)) ;
-	struct		mydatapooldata *Ele2DP = (struct mydatapooldata *)(dp2.LinkDataPool()) ;
-
-	while(flag) {
-		if (ps4.Read()>0) {
-			ps4.Wait();
-
-			ele[1] = *Ele2DP;
-
-			cs4.Signal();
-		}
-		Sleep(5);
-	}
-	return 0 ;									
-}
-
-//void dp_dispatch (struct mydatapooldata *MyDataPool, struct mydatapooldata *MyDataPool2) {
-//	printf("Ele1 linked to datapool at address %p.....\n", MyDataPool) ;
-//	printf("Ele1 Read value for Floor = %d\n", MyDataPool->floor) ;
-//	printf("Ele1 Read value for Direction = %d\n", MyDataPool->direction) ; 
-//	printf("Ele1 Read values for floor array = ") ;
-//	for(int i=0; i < 10; i ++) {
-//		printf("%d ", MyDataPool->floors[i]) ;
-//	}
-//	printf("\n");
-//	
-//	printf("Ele2 linked to datapool at address %p.....\n", MyDataPool2) ;
-//	printf("Ele2 has value for Floor = %d\n", MyDataPool2->floor) ;
-//	printf("Ele2 has value for Direction = %d\n", MyDataPool2->direction) ; 
-//	printf("Ele2 has values for floor array = ") ;
-//	for(int i=0; i < 10; i ++) {
-//		printf("%d ", MyDataPool2->floors[i]) ;
-//	}
-//	printf("\n");
-//}
-
-// Start Messaging (not crit; has 1 getchar())
-void MsgStart() {
-	//Sleep(3000);
-	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-	printf("\n\n\n\n\n\n\n\nSystem IO online.");
-	printf("\nThis building has: 2 elevators.");
-	//Sleep(2000);
-	//printf("\nWhich elevator(s) would you like to activate?");
-	//printf("\n(Press the number for the one you would like to activate, or press 'a' for activating all, 'n' will exit):\n");
-	printf("\nPress any key to start...");
-	printf("\n");
-}
 
 // @@------^-----^--------^-------===----|\---|----@@
 // @@-----/-\---/-\------/-\-------|-----|-\--|----@@
 // @@----/---\-/---\----/===\------|-----|--\-|----@@
 // @@---/-----V-----\--/-----\----===----|---\|----@@
 int main(void) {
+	CRendezvous		r1("StartRendezvous", 4); //global rendezvous for starting all 4 threads at the same time.
+	CRendezvous		r2("EndRendezvous", 4); // global rendezvous for ending all 4 threads at the same time.
 	char x = 0;
 	int val = 0, status_p1 = 0, status_p2 = 0;
 	int pipe1data = 0, pipe2data = 0;
 	int freezeOn = 1, freezeOff = 0;
-	//char KeyData;
+	int eleStatus[eleCount];
 	double counter = 0;
 	int tdir = 0, tfloor = 0, assign = 0, assignTarget = 99;
 	int eleRank[eleCount];
@@ -172,6 +74,7 @@ int main(void) {
 	);
 
 	MsgStart();
+
 	printf("\nwaiting for others...\n");
 	r1.Wait();
 	
@@ -180,10 +83,7 @@ int main(void) {
 	CThread	t2(DispatcherToElevator2, ACTIVE, NULL) ;
 
 
-
-
 	while( flag )  {
-
 		
 		if ((pipe1.TestForData()) >= sizeof(pipe1data) )	{		// if at least 1 integer in pipeline
 			pipe1.Read(&pipe1data , sizeof(pipe1data)) ;		// read data from pipe 

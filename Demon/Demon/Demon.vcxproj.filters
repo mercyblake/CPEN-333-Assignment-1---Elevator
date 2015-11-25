@@ -32,6 +32,9 @@
     <ClInclude Include="..\..\..\..\RTExample\rt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="elevator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="TDL.txt">

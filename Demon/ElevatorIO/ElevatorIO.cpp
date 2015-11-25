@@ -1,32 +1,11 @@
 #include 	<stdio.h>
 #include "..\..\..\..\RTExample\rt.h"
+#include "..\Demon\elevator.h"
 
-static const int STOPPED =	0	;
-static const int UP	=		1	;
-static const int DOWN =		2	;
 
-static const int NOTUSED =	0	;
-static const int USING =	1	;
+int			flag = 1; //flag to allow threads to continue.
 
-static const int CLOSED	=	0	;
-static const int OPEN =		1	;
-
-static const int NO_DESTINATION =	11 ;
-
-struct 	mydatapooldata 	{	// start of structure template
-		int floor ;			// floor corresponding to lifts current position
-		int usage;
-		int door;			
-		int direction ;		// direction of travel of lift
-		int floors[10] ;	// an array representing the floors and whether requests are set 
-		int lights[10] ;
-		int updir[10];
-		int downdir[10];
-} ;							// end of structure template
-
-int		flag = 1; //flag to allow threads to continue.
-
-struct		mydatapooldata Ele1Status, Ele2Status;
+struct		myDpData Ele1Status, Ele2Status;
 
 //@ INIT: DP 2x (also used for connect
 
@@ -48,8 +27,8 @@ CPipe		pipe4	("PipeIOToElevator2", 1024);
 
 UINT __stdcall IOToElevator1(void *args)			
 {
-	CDataPool	dp1("Ele1", sizeof(struct mydatapooldata)) ;
-	struct		mydatapooldata *Ele1DP = (struct mydatapooldata *)(dp1.LinkDataPool());
+	CDataPool	dp1("Ele1", sizeof(struct myDpData)) ;
+	struct		myDpData *Ele1DP = (struct myDpData *)(dp1.LinkDataPool());
 
 	while(flag) {	
 		if (ps1.Read()>0) {
@@ -409,8 +388,8 @@ UINT __stdcall IOToElevator1(void *args)
 UINT __stdcall IOToElevator2(void *args)
 {								
 	
-	CDataPool	dp2("Ele2", sizeof(struct mydatapooldata)) ;
-	struct		mydatapooldata *Ele2DP = (struct mydatapooldata *)(dp2.LinkDataPool()) ;
+	CDataPool	dp2("Ele2", sizeof(struct myDpData)) ;
+	struct		myDpData *Ele2DP = (struct myDpData *)(dp2.LinkDataPool()) ;
 
 	while(flag) {
 		
