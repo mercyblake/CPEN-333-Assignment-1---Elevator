@@ -7,6 +7,8 @@ TDL (Starting Nov ):
 2) Fix erasing bug for elevator.
 3) Create function for printing line in ElevatorIO.
 4) Include direction recognition.
+Add request at beginning "How many elevators you want"<-THE BIG ONE
+Combine logic all to dispatcher
 Improve modularity of code.
 Add third elevator.
 Edit command ee to specifications.
