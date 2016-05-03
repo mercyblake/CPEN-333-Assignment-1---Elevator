@@ -29,5 +29,14 @@
     <ClInclude Include="rt.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="Elevator_ActiveClass.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dispatcher_ActiveClass.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MonitorUpdate_ActiveClass.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -36,13 +36,14 @@ using namespace std;
 
 #endif
 
+#ifndef __ELEVATOR__
+#define __ELEVATOR__
 /**
   * Elevator definitions. Class imported from Demon: elevator.h
   *
   *
   */
-#ifndef __ELEVATOR__
-#define __ELEVATOR__
+
 
 struct 	elevatorStatus 	{	// start of structure template
 		int floor ;			// floor corresponding to lifts current position

@@ -78,7 +78,10 @@
     <ClCompile Include="rt.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Dispatcher_ActiveClass.h" />
+    <ClInclude Include="Elevator_ActiveClass.h" />
     <ClInclude Include="I-O.h" />
+    <ClInclude Include="MonitorUpdate_ActiveClass.h" />
     <ClInclude Include="rt.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
