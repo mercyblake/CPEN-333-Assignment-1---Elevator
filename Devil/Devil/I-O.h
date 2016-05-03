@@ -25,7 +25,7 @@
 // * - concatenate strings to create DPs and pipelines
 // */
 
-#include "..\..\..\..\RTexample\rt.h"
+#include "rt.h"
 
 /* rt.h
  * Dialog with win32 for multithreaded.
