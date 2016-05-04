@@ -17,66 +17,35 @@ public:
 	~MonitorUpdate(){}
 
 private:
-	int Fxn1(void *threaddata1) {
-		//Testing.
-		for (int i = 0; i < 3; i++) {
-			printf("this is Fxn1  -> %d <- \n", myNumber) ;
-			Sleep(5);
-		}
-		return 0;
-	}
-
-	int Fxn2(void *threaddata1) {
-		//Testing.
-		for (int i = 0; i < 3; i++) {
-			printf("this is Fxn2  -> %d <- -> %d <-\n", rand()%100 + 100, myNumber ) ;
-			Sleep(5);
-		}
-		return 0;
-	}
 
 	int main(void)
 	{
 		
-		/*-------------------------------------------------------------------------------------------------------------*/
-		/* Initializing Rendezvous */
-		/*-------------------------------------------------------------------------------------------------------------*/	
-		CRendezvous	ELE_r1	("Rendezvous_InitiateActiveClasses", rendezvousCount); //rendezvous point for all programs to start together.
-		CRendezvous ELE_r2	("Rendezvous_TerminateClasses", rendezvousCount);
 		
 		/*-------------------------------------------------------------------------------------------------------------*/
-		/* Initializing Mutexes */
+		/* Initializing Monitor Mutex */
 		/*-------------------------------------------------------------------------------------------------------------*/	
-		CMutex* ELE_mutex = new CMutex ("Mutex_General");
+		CMutex* MU_mutex = new CMutex ("Mutex_Monitor");
 		
 		/*-------------------------------------------------------------------------------------------------------------*/
 		/* Initializing Datapools */
 		/*-------------------------------------------------------------------------------------------------------------*/	
-		string ELE_DPString = "Datapool_" + to_string(static_cast<long long>(myNumber));
+		string MU_DPString = "Datapool_" + to_string(static_cast<long long>(myNumber));
 
-		CDataPool ELE_ElevatorStruct_DataPool(ELE_DPString, sizeof(struct elevatorStatus));
-		elevatorStatus* ELE_ElevatorStruct_Local = (struct elevatorStatus*)(ELE_ElevatorStruct_DataPool.LinkDataPool());
-
-		/*-------------------------------------------------------------------------------------------------------------*/
-		/* Initializing Pipes */
-		/*-------------------------------------------------------------------------------------------------------------*/	
-
-		CPipe ELE_Pipe_EleToDisp = "Pipe_DispatcherToEle_" + to_string(static_cast<long long>(myNumber));
-		CPipe ELE_Pipe_DisptoEle = "Pipe_Ele_" + to_string(static_cast<long long>(myNumber)) + "_ToDispatcher";
+		CDataPool MU_ElevatorStruct_DataPool(MU_DPString, sizeof(struct elevatorStatus));
+		elevatorStatus* MU_ElevatorStruct_Local = (struct elevatorStatus*)(MU_ElevatorStruct_DataPool.LinkDataPool());
 
 		/*-------------------------------------------------------------------------------------------------------------*/
-		/*  */
-		/*-------------------------------------------------------------------------------------------------------------*/	
-		printf("%d rendEle %d \n", rendezvousCount,myNumber);
-		ELE_r1.Wait();
-		ClassThread<Elevator> Thread1 (this, &Elevator::Fxn1, ACTIVE, NULL) ;
-		ClassThread<Elevator> Thread2 (this, &Elevator::Fxn2, ACTIVE, NULL) ;
-		ClassThread<Elevator> Thread3 (this, &Elevator::Fxn1, ACTIVE, NULL) ;
-		Thread1.WaitForThread();
-		Thread2.WaitForThread();
-		Thread3.WaitForThread();
+		/* Initializing Semaphores for Datapools - Consumer */
+		/*-------------------------------------------------------------------------------------------------------------*/			
+		string MU_SemaphoreString_Producer = "PS_DP_" + to_string(static_cast<long long>(myNumber));
+		string MU_SemaphoreString_Consumer = "CS_DP_" + to_string(static_cast<long long>(myNumber));
+		CSemaphore ps1 ( MU_SemaphoreString_Producer, 0, 1 );
+		CSemaphore cs1 ( MU_SemaphoreString_Producer, 1, 1 );
 
-		ELE_r2.Wait();
+		/*-------------------------------------------------------------------------------------------------------------*/
+		/* Monitor Update Logic */
+		/*-------------------------------------------------------------------------------------------------------------*/	
 		return 0;
 	}
 } ;

@@ -20,6 +20,7 @@
 
 #include "Dispatcher_ActiveClass.h"
 #include "Elevator_ActiveClass.h"
+#include "MonitorUpdate_ActiveClass.h"
 
 
  
@@ -53,10 +54,15 @@ int main() {
 	CRendezvous IO_r2	("Rendezvous_TerminateClasses", rendezvousCount);
 
 	/*--------------------------------------------------------------------------------------------------------------*/
-	/* Initializing Pipelines */
+	/* Initializing Pipelines, pipeline semaphores, and data storage for pipeline data*/
 	/*--------------------------------------------------------------------------------------------------------------*/
 	CPipe	pipe1	("PipeIOToDispatcher", 1024) ; //defaulting to int.
 	CPipe	pipe2	("PipeDispatcherToIO", 1024) ;
+	
+	CSemaphore PS_pipe1 ("PS_pipe_1", 0 , 1);
+	CSemaphore CS_pipe1 ("CS_pipe_1", 1 , 1);
+	CSemaphore PS_pipe2 ("PS_pipe_2", 0 , 1);
+	CSemaphore CS_pipe2 ("CS_pipe_2", 1 , 1);
 
 	int pipe1data = 0;
 	int pipe2data = 0;
@@ -64,23 +70,23 @@ int main() {
 	/*--------------------------------------------------------------------------------------------------------------*/
 	/* Initializing Mutexes */
 	/*--------------------------------------------------------------------------------------------------------------*/	
-	CMutex* IO_mutex = new CMutex ("Mutex_General");
+	CMutex* IO_mutex = new CMutex ("Mutex_Monitor");
 
-	/*--------------------------------------------------------------------------------------------------------------*/
-	/* Initializing Datapools */
-	/*--------------------------------------------------------------------------------------------------------------*/	
-	string IO_DPStringBegin = "Datapool_";
-	string* IO_DPStringArray_Full = new string[numElevator];
-	for (int i = 0; i < numElevator ; i++) {
-		IO_DPStringArray_Full[i] = IO_DPStringBegin + to_string(static_cast<long long>(i));
-	}
+	///*--------------------------------------------------------------------------------------------------------------*/
+	///* Initializing Datapools */
+	///*--------------------------------------------------------------------------------------------------------------*/	
+	//string IO_DPStringBegin = "Datapool_";
+	//string* IO_DPStringArray_Full = new string[numElevator];
+	//for (int i = 0; i < numElevator ; i++) {
+	//	IO_DPStringArray_Full[i] = IO_DPStringBegin + to_string(static_cast<long long>(i));
+	//}
 
-	CDataPool** IO_ElevatorStructArray_DataPool = new CDataPool*[numElevator];
-	struct elevatorStatus** IO_ElevatorStructArray_Local = new elevatorStatus*[numElevator];
-	for (int i = 0; i < numElevator ; i++) {
-		IO_ElevatorStructArray_DataPool[i] = new CDataPool(IO_DPStringArray_Full[i], sizeof(struct elevatorStatus));
-		IO_ElevatorStructArray_Local[i] = (elevatorStatus*)(IO_ElevatorStructArray_DataPool[i]->LinkDataPool()); 
-	}
+	//CDataPool** IO_ElevatorStructArray_DataPool = new CDataPool*[numElevator];
+	//struct elevatorStatus** IO_ElevatorStructArray_Local = new elevatorStatus*[numElevator];
+	//for (int i = 0; i < numElevator ; i++) {
+	//	IO_ElevatorStructArray_DataPool[i] = new CDataPool(IO_DPStringArray_Full[i], sizeof(struct elevatorStatus));
+	//	IO_ElevatorStructArray_Local[i] = (elevatorStatus*)(IO_ElevatorStructArray_DataPool[i]->LinkDataPool()); 
+	//}
 
 	
 	/*--------------------------------------------------------------------------------------------------------------*/
@@ -121,16 +127,16 @@ int main() {
 	while( flag )
 		if (TEST_FOR_KEYBOARD() != 0) {
 			KeyData = getch() ;					// read next character from keyboard
-
+		}
 	
 	/*--------------------------------------------------------------------------------------------------------------*/
 	/* Closing Threads */
 	/*                                                                                                              */
 	/*--------------------------------------------------------------------------------------------------------------*/
 	
-	delete[] IO_DPStringArray_Full;
-	delete[] IO_ElevatorStructArray_Local;
-	delete[] IO_ElevatorStructArray_DataPool;
+	//delete[] IO_DPStringArray_Full;
+	//delete[] IO_ElevatorStructArray_Local;
+	//delete[] IO_ElevatorStructArray_DataPool;
 
 	IO_r2.Wait();
 

@@ -49,7 +49,7 @@ private:
 		/*-------------------------------------------------------------------------------------------------------------*/
 		/* Initializing Mutexes */
 		/*-------------------------------------------------------------------------------------------------------------*/	
-		CMutex* ELE_mutex = new CMutex ("Mutex_General");
+		CMutex* ELE_mutex = new CMutex ("Mutex_Monitor");
 		
 		/*-------------------------------------------------------------------------------------------------------------*/
 		/* Initializing Datapools */
@@ -65,6 +65,15 @@ private:
 
 		CPipe ELE_Pipe_EleToDisp = "Pipe_DispatcherToEle_" + to_string(static_cast<long long>(myNumber));
 		CPipe ELE_Pipe_DisptoEle = "Pipe_Ele_" + to_string(static_cast<long long>(myNumber)) + "_ToDispatcher";
+
+		/*-------------------------------------------------------------------------------------------------------------*/
+		/* Initializing Semaphores - Elevators act as producers for the datapool*/
+		/*-------------------------------------------------------------------------------------------------------------*/	
+
+		string ELE_SemaphoreString_Producer = "PS_DP_" + to_string(static_cast<long long>(myNumber));
+		string ELE_SemaphoreString_Consumer = "CS_DP_" + to_string(static_cast<long long>(myNumber));
+		CSemaphore ps1 ( ELE_SemaphoreString_Producer, 0, 1 );
+		CSemaphore cs1 ( ELE_SemaphoreString_Producer, 1, 1 );
 
 		/*-------------------------------------------------------------------------------------------------------------*/
 		/*  */

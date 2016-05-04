@@ -1,10 +1,12 @@
-﻿Build started 2016-05-02 7:54:34 PM.
+﻿Build started 2016-05-04 2:22:28 AM.
      1>Project "T:\Take\Y4\CPEN 333\Assignment 1 - Elevator\CPEN-333-Assignment-1---Elevator\CPEN-333-Assignment-1---Elevator\Devil\Devil\Devil.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Creating "Debug\Devil.unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "Debug\Devil.unsuccessfulbuild".
        ClCompile:
          T:\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt "I-O.cpp"
          I-O.cpp
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\i-o.cpp(129): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _getch. See online help for details.
+                 t:\microsoft visual studio 10.0\vc\include\conio.h(128) : see declaration of 'getch'
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -24,4 +26,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.40
+Time Elapsed 00:00:01.16
