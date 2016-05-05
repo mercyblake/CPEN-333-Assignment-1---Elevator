@@ -41,6 +41,7 @@ int main() {
 	cout << "Input the number of elevators you want: " << endl;
 	cin >> numElevator;
 	cout << "user entered: " << numElevator << endl;
+	string str_numElevator = to_string(static_cast<long long>(numElevator));
 	Elevator ** ele;
 	ele = new Elevator*[numElevator];
 	
@@ -122,12 +123,113 @@ int main() {
 	/*--------------------------------------------------------------------------------------------------------------*/
 
 	bool flag = TRUE;
-	char KeyData;
+	char KeyData, KeyData1;
+	int iKeyData = 0;
 
-	while( flag )
+
+	string str_OutsideElevator_MainInstructions = "To control OUTSIDE of the elevators, select floor number, and then direction.";
+	string str_InsideElevator_MainInstructions = "To control INSIDE of the elevator, select the elevator, and then desired level.";
+
+	string str_OutsideElevator_FloorSelect_Prompt = "Select your current floor by pressing a number between 0 - 9.";
+	string str_OutsideElevator_FloorSelect_Restate = "You are outside of floor: ";
+	string str_OutsideElevator_DirectionSelect_Prompt = "Which direction would you like to go? \r\n Press 'u' for UP, 'd' for DOWN.";
+	string str_OutsideElevator_DirectionSelect_Restate = "You are going: ";
+
+	string str_InsideElevator_SelectElevator_Prompt = "Press the elevator you wish to control ( 1 to " + str_numElevator + ").";
+	string str_InsideElevator_SelectElevator_Restate = "You have selected elevator: ";
+	string str_InsideElevator_FloorSelect_Prompt = "Select the desired floor you wish to travel towards.";
+	string str_InsideElevator_FloorSelect_Restate = "You have selected to travel to floor: ";
+
+	string str_Admin_MainInstructions = "You may press 'x' at any time to enter ADMIN mode, which allows you to: \r\n\tpause/continue an elevator, \r\t\nor terminate the program.";
+	string str_Admin_Prompt = "You are now in ADMIN mode. \r\n\nPress 'x' again to terminate the program, or \r\nEnter a number between 1 and " + str_numElevator + " to pause/continue that elevator. \r\n\nPress any other key to exit ADMIN mode without giving any instruction."; // don't forget to use str_RequestPressEnter
+	
+
+	string str_UserMainMenu = "Press:\n\r\t 1: Select Elevator.\n\r 9: Terminate program.";
+	string str_RequestElevator = "You have a total of " + str_numElevator + " elevators. Type a number between 1 and " + str_numElevator +'.';
+
+
+	while( flag ) {
+
+		IO_mutex->Wait();
+		MOVE_CURSOR(0,50);
+		cout << str_OutsideElevator_DirectionSelect_Prompt << endl;
+		fflush(stdout);
+		IO_mutex->Signal();
+
 		if (TEST_FOR_KEYBOARD() != 0) {
 			KeyData = getch() ;					// read next character from keyboard
+			
+
+
+
+			while (TEST_FOR_KEYBOARD() == 0) {}
+			KeyData1 = getch();
+			IO_mutex->Wait();
+			MOVE_CURSOR(0,51);
+			printf("second character = %c           \n", KeyData1);
+			printf("command entered is: %c%c        \n", KeyData, KeyData1);
+
+			//Command Organization.
+
+			if (KeyData == 'e' && KeyData1 == 'e'){
+				flag = FALSE;
+				printf("terminating. (2 seconds)                  \n   ");
+				Sleep(2000);
+			}
+			else if (KeyData == '-' && KeyData1 == '1') {
+				iKeyData = 70;
+				pipe1.Write(&iKeyData, sizeof(int));
+				printf("FREEZING Elevator 1!                            ");
+			}
+
+			else if (KeyData == '-' && KeyData1 == '2') {
+				iKeyData = 71;
+				pipe1.Write(&iKeyData, sizeof(int));
+				printf("FREEZING Elevator 2!                            ");
+			}
+
+			else if (KeyData == '+' && KeyData1 == '1') {
+				iKeyData = 75;
+				pipe1.Write(&iKeyData, sizeof(int));
+				printf("FAULT FIXED for Elevator 1!                      ");
+			}
+
+			else if (KeyData == '+' && KeyData1 == '2') {
+				iKeyData = 76;
+				pipe1.Write(&iKeyData, sizeof(int));
+				printf("FAULT FIXED for Elevator 2!                     ");
+			}
+
+			else if (KeyData == 'u'&& ( (KeyData1-'0') >= 0 && (KeyData1-'0') < 10 ) ) {
+				iKeyData = 10 + KeyData1 - '0';
+				pipe1.Write(&iKeyData, sizeof(int));
+				printf("Someone Outside Floor %d wants to go UP.       ", (KeyData1 - '0') );
+			}
+			else if (KeyData == 'd'&& ( (KeyData1-'0') >= 0 && (KeyData1-'0') < 10 )) {
+				iKeyData = 20 + KeyData1 - '0';
+				pipe1.Write(&iKeyData, sizeof(int));
+				printf("Someone Outside Floor %d wants to go DOWN.     ", (KeyData1 - '0') );
+			}
+			else if (KeyData == '1'&& ( (KeyData1-'0') >= 0 && (KeyData1-'0') < 10 )) {
+				iKeyData = 50 + KeyData1 - '0';
+				pipe1.Write(&iKeyData, sizeof(int));
+				printf("Someone Inside Elevator 1 Pressed Floor %d.    ", (KeyData1 - '0') );
+			}
+			else if (KeyData == '2'&& ( (KeyData1-'0') >= 0 && (KeyData1-'0') < 10 )) {
+				iKeyData = 60 + KeyData1 - '0';
+				pipe1.Write(&iKeyData, sizeof(int));
+				printf("Someone Inside Elevator 2 Pressed Floor %d.    ", (KeyData1 - '0') );
+			}
+			else{
+				printf("ERROR: illegible code.                         ");
+			}
+			fflush(stdout);
+			IO_mutex->Signal();
+			KeyData = '0';
+			KeyData1 = '0';
+			iKeyData = 0;
 		}
+	}
 	
 	/*--------------------------------------------------------------------------------------------------------------*/
 	/* Closing Threads */
