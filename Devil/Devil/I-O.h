@@ -69,5 +69,4 @@ static const int OPEN =		1	;
 static const int NO_DESTINATION =	11 ;
 
 
-#define IS_CAN_BS1(BS1) ((BS1) <= (uint8_t)0x0F)
 #endif
