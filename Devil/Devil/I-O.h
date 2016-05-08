@@ -34,6 +34,20 @@
 
 using namespace std;
 
+// IO case states.
+#define IO_state_MainMenu 0 //waits for first character
+#define IO_state_PrintMainMenu 1 //prints main menu and enters it
+#define IO_state_Outside_PrintFirstPrompt 2 //asking for floor number, and printing received direction.
+#define IO_state_Outside_WaitForSecondButton 3 //waiting for user input of current floor number.
+#define IO_state_Outside_PrintSecondPrompt 4 //restates the received current floor number.
+#define IO_state_Inside_PrintFirstPrompt 5 //restates the received elevator number, ask for target floor number.
+#define IO_state_Inside_WaitForSecondButton 6 //waiting for user input of desired floor number.
+#define IO_state_Inside_PrintSecondPrompt 7 //restates the received desired floor number
+#define IO_state_DisplayTwoSeconds 8 //displays the completed instruction for two seconds before returning to main menu
+#define IO_state_Admin_PrintFirstPrompt 9 //prints first prompt of ADMIN
+#define IO_state_PrintReceivedWrongCommand 10 //tells the user that a wrong command has been received.
+#define IO_state_PipeToDispatcher 11
+
 #endif
 
 #ifndef __ELEVATOR__
