@@ -1,20 +1,82 @@
-﻿Build started 2016-05-04 4:32:00 PM.
+﻿Build started 2016-05-06 6:42:42 PM.
      1>Project "T:\Take\Y4\CPEN 333\Assignment 1 - Elevator\CPEN-333-Assignment-1---Elevator\CPEN-333-Assignment-1---Elevator\Devil\Devil\Devil.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Devil.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
-       ManifestResourceCompile:
-         All outputs are up-to-date.
-       Link:
-         All outputs are up-to-date.
-       Manifest:
-         All outputs are up-to-date.
-       FinalizeBuildStatus:
-         Deleting file "Debug\Devil.unsuccessfulbuild".
-         Touching "Debug\Devil.lastbuildstate".
-     1>Done Building Project "T:\Take\Y4\CPEN 333\Assignment 1 - Elevator\CPEN-333-Assignment-1---Elevator\CPEN-333-Assignment-1---Elevator\Devil\Devil\Devil.vcxproj" (build target(s)).
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt "I-O.cpp" rt.cpp
+         rt.cpp
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\rt.cpp(1789): warning C4244: 'initializing' : conversion from 'std::streamsize' to 'int', possible loss of data
+         I-O.cpp
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(40): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(40): error C2059: syntax error : ','
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(40): error C2059: syntax error : ')'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(42): error C2146: syntax error : missing ';' before identifier 'K'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(42): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(42): error C2146: syntax error : missing ';' before identifier 'CDataPool'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(42): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(42): error C2061: syntax error : identifier 'ELE_DPString'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(42): error C2059: syntax error : ')'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(42): error C2143: syntax error : missing ')' before ';'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(43): error C2228: left of '.LinkDataPool' must have class/struct/union
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(43): error C2864: 'Elevator::ELE_ElevatorStruct_Local' : only static const integral data members can be initialized within a class
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(49): error C2327: 'Elevator::myNumber' : is not a type name, static, or enumerator
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(49): error C2065: 'myNumber' : undeclared identifier
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(49): error C2864: 'Elevator::ELE_Pipe_EleToDisp' : only static const integral data members can be initialized within a class
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(50): error C2327: 'Elevator::myNumber' : is not a type name, static, or enumerator
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(50): error C2065: 'myNumber' : undeclared identifier
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(50): error C2864: 'Elevator::ELE_Pipe_DisptoEle' : only static const integral data members can be initialized within a class
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(56): error C2327: 'Elevator::myNumber' : is not a type name, static, or enumerator
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(56): error C2065: 'myNumber' : undeclared identifier
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(56): error C2864: 'Elevator::ELE_SemaphoreString_Producer' : only static const integral data members can be initialized within a class
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(57): error C2327: 'Elevator::myNumber' : is not a type name, static, or enumerator
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(57): error C2065: 'myNumber' : undeclared identifier
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(57): error C2864: 'Elevator::ELE_SemaphoreString_Consumer' : only static const integral data members can be initialized within a class
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(58): error C2061: syntax error : identifier 'ELE_SemaphoreString_Producer'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(59): error C2061: syntax error : identifier 'ELE_SemaphoreString_Producer'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(64): error C2059: syntax error : 'string'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(64): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(64): warning C4183: 'printf': missing return type; assumed to be a member function returning 'int'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(65): error C2143: syntax error : missing ';' before '.'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(65): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(65): error C2238: unexpected token(s) preceding ';'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(66): error C2059: syntax error : 'this'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(67): error C2059: syntax error : 'this'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(68): error C2059: syntax error : 'this'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(69): error C2143: syntax error : missing ';' before '.'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(69): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(69): error C2238: unexpected token(s) preceding ';'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(70): error C2143: syntax error : missing ';' before '.'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(70): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(70): error C2238: unexpected token(s) preceding ';'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(71): error C2143: syntax error : missing ';' before '.'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(71): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(71): error C2238: unexpected token(s) preceding ';'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(73): error C2143: syntax error : missing ';' before '.'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(73): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(73): error C2238: unexpected token(s) preceding ';'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(74): error C2059: syntax error : 'return'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(74): error C2238: unexpected token(s) preceding ';'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(76): error C2143: syntax error : missing ';' before '}'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(76): error C2059: syntax error : '}'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(76): error C2143: syntax error : missing ';' before '}'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(14): error C2512: 'CPipe' : no appropriate default constructor available
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(14): error C2512: 'CPipe' : no appropriate default constructor available
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(15): error C2512: 'CPipe' : no appropriate default constructor available
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(15): error C2512: 'CPipe' : no appropriate default constructor available
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(25): error C2660: 'Elevator::printf' : function does not take 2 arguments
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(34): error C2660: 'Elevator::printf' : function does not take 3 arguments
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\elevator_activeclass.h(76): error C2059: syntax error : '}'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\i-o.cpp(97): error C2259: 'Elevator' : cannot instantiate abstract class
+                 due to following members:
+                 'int ActiveClass::main(void)' : is abstract
+                 t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\rt.h(478) : see declaration of 'ActiveClass::main'
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\i-o.cpp(131): error C2065: 'str_numElevator' : undeclared identifier
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\i-o.cpp(142): error C2065: 'str_numElevator' : undeclared identifier
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\i-o.cpp(149): error C2065: 'str_numElevator' : undeclared identifier
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\i-o.cpp(149): error C2065: 'str_numElevator' : undeclared identifier
+         Generating Code...
+     1>Done Building Project "T:\Take\Y4\CPEN 333\Assignment 1 - Elevator\CPEN-333-Assignment-1---Elevator\CPEN-333-Assignment-1---Elevator\Devil\Devil\Devil.vcxproj" (build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:00.03
+Time Elapsed 00:00:04.66
