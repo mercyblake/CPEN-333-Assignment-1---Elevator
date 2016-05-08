@@ -41,7 +41,7 @@ int main() {
 	cout << "Input the number of elevators you want: " << endl;
 	cin >> numElevator;
 	cout << "user entered: " << numElevator << endl;
-	string str_numElevator = to_string(static_cast<long long>(numElevator));
+	to_string(static_cast<long long>(numElevator));
 	Elevator ** ele;
 	ele = new Elevator*[numElevator];
 	
@@ -120,45 +120,170 @@ int main() {
 	/*--------------------------------------------------------------------------------------------------------------*/
 	/* IO Logic */
 	/* - Goal is to send all keyboard instructions to the dispatcher to decide what to do                           */
+	/* - IO has control over lines 50 to 60 of the console.															*/
 	/*--------------------------------------------------------------------------------------------------------------*/
 
 	bool flag = TRUE;
 	char KeyData, KeyData1;
 	int iKeyData = 0;
+	UINT state = 0;
+	//strings
+	string str_MainInstructions = "\r\nLOCATION: MAIN MENU\r\n\nTo control OUTSIDE of the elevators, first select the direction ('u' or 'd'), and then select your current floor number (0 - 9). \r\nExample: u4, d3 \r\n\nTo control INSIDE of the elevator, select the elevator (1 - " + str_numElevator + "), and then desired level.\r\nExample: To go to select elevator 1 to go to floor 4, input 14.";
 
-
-	string str_OutsideElevator_MainInstructions = "To control OUTSIDE of the elevators, select floor number, and then direction.";
-	string str_InsideElevator_MainInstructions = "To control INSIDE of the elevator, select the elevator, and then desired level.";
-
-	string str_OutsideElevator_FloorSelect_Prompt = "Select your current floor by pressing a number between 0 - 9.";
-	string str_OutsideElevator_FloorSelect_Restate = "You are outside of floor: ";
-	string str_OutsideElevator_DirectionSelect_Prompt = "Which direction would you like to go? \r\n Press 'u' for UP, 'd' for DOWN.";
-	string str_OutsideElevator_DirectionSelect_Restate = "You are going: ";
-
-	string str_InsideElevator_SelectElevator_Prompt = "Press the elevator you wish to control ( 1 to " + str_numElevator + ").";
-	string str_InsideElevator_SelectElevator_Restate = "You have selected elevator: ";
-	string str_InsideElevator_FloorSelect_Prompt = "Select the desired floor you wish to travel towards.";
-	string str_InsideElevator_FloorSelect_Restate = "You have selected to travel to floor: ";
-
-	string str_Admin_MainInstructions = "You may press 'x' at any time to enter ADMIN mode, which allows you to: \r\n\tpause/continue an elevator, \r\t\nor terminate the program.";
-	string str_Admin_Prompt = "You are now in ADMIN mode. \r\n\nPress 'x' again to terminate the program, or \r\nEnter a number between 1 and " + str_numElevator + " to pause/continue that elevator. \r\n\nPress any other key to exit ADMIN mode without giving any instruction."; // don't forget to use str_RequestPressEnter
+	string str_OutsideElevator_DirectionSelect_Restate = "\r\nLOCATION: OUTSIDE ELEVATORS\r\nThe direction you selected is: ";
+	string str_OutsideElevator_FloorSelect_Prompt = "\r\nSelect your current floor by pressing a number between 0 - 9.";
+	string str_OutsideElevator_FloorSelect_Restate = "\r\nYour current floor is: ";
 	
+	string str_InsideElevator_SelectElevator_Restate = "\r\nYou are inside elevator: ";
+	string str_InsideElevator_FloorSelect_Prompt = "\r\nSelect the desired floor you wish to travel towards.";
+	string str_InsideElevator_FloorSelect_Restate = "\r\nYour target floor is: ";
 
-	string str_UserMainMenu = "Press:\n\r\t 1: Select Elevator.\n\r 9: Terminate program.";
-	string str_RequestElevator = "You have a total of " + str_numElevator + " elevators. Type a number between 1 and " + str_numElevator +'.';
+	string str_Admin_MainInstructions = "\r\nYou may press 'x' at any time to enter ADMIN mode, which allows you to: \r\n\tpause/continue an elevator, \r\t\nor terminate the program.";
+	string str_Admin_Prompt = "\r\nADMIN MODE \r\n\nPress 'q' to terminate the program, or \r\nEnter a number between 1 and " + str_numElevator + " to freeze/resume that elevator. \r\n\nPress any other key to exit ADMIN mode without giving any instruction."; // don't forget to use str_RequestPressEnter
+	string str_Admin_Halting = "\r\nYou are halting elevator: ";
+	string str_Admin_Resuming = "\r\nYou are resuming elevator: ";
+	
+	string str_RecentInstructions = "\r\nMost recent instruction inputs: ";
+	string str_WrongCommand = "\r\nYou have inputed an incorrect command. \r\nYou are now returned to the main menu.";
+	string str_UserMainMenu = "\r\nPress:\n\r\t 1: Select Elevator.\n\r 9: Terminate program.";
+	string str_RequestElevator = "\r\nYou have a total of " + str_numElevator + " elevators. Type a number between 1 and " + str_numElevator +'.';
 
+
+
+#define IO_LocationUnknown 0
+#define IO_Inside 1
+#define IO_Outside 2
+#define IO_UP 1
+#define IO_DOWN 2
+int IO_UserLocation = 0;
+int IO_UserData = 0;
 
 	while( flag ) {
 
-		IO_mutex->Wait();
-		MOVE_CURSOR(0,50);
-		cout << str_OutsideElevator_DirectionSelect_Prompt << endl;
-		fflush(stdout);
-		IO_mutex->Signal();
+		switch (state) {
 
-		if (TEST_FOR_KEYBOARD() != 0) {
-			KeyData = getch() ;					// read next character from keyboard
+		case IO_state_PrintMainMenu: //prints main menu and enters it
+
+			IO_mutex->Wait();
+			MOVE_CURSOR(0,50);
+			cout << str_MainInstructions << endl;
+			fflush(stdout);
+			MOVE_CURSOR(0,58);
+			cout <<str_Admin_MainInstructions << endl;
+			fflush(stdout);
+			IO_mutex->Signal();
 			
+			state = IO_state_MainMenu;
+			break;
+
+		case IO_state_Outside_PrintFirstPrompt: //asking for floor number, and printing received direction.
+			
+			IO_mutex->Wait();
+			MOVE_CURSOR(0,50);
+			cout << str_OutsideElevator_DirectionSelect_Restate;
+			if (IO_UserData % 10 == 1) {
+				cout << "UP" << endl;
+			}
+			else if (IO_UserData % 10 == 2) {
+				cout << "DOWN" << endl;
+			}
+			else {
+				cout << "ERROR (outside print first prompt)" << endl;
+			}
+			fflush(stdout);
+			MOVE_CURSOR(0,58);
+			cout << str_Admin_MainInstructions << endl;
+			fflush(stdout);
+			IO_mutex->Signal();
+
+			state = IO_state_Outside_WaitForSecondButton;
+			break;
+
+		case IO_state_Outside_WaitForSecondButton: //waiting for user input of current floor number.
+
+			if (TEST_FOR_KEYBOARD() != 0) {
+				KeyData = getch() ;					// read next character from keyboard
+
+				if (KeyData == 'x') {
+					state = IO_state_Admin_PrintFirstPrompt;
+				}
+
+				else if (unsigned int((KeyData) -'0') < 10) {
+					state = IO_state_Outside_PrintSecondPrompt;
+				}
+
+				else {
+					state = IO_state_PrintReceivedWrongCommand;
+				}
+
+			}
+			break;
+
+		case IO_state_Outside_PrintSecondPrompt: //restates the received current floor number.
+
+			IO_mutex->Wait();
+			MOVE_CURSOR(0,50);
+			cout << str_OutsideElevator_FloorSelect_Restate;
+			if (IO_UserData % 10 == 1) {
+				cout << "UP" << endl;
+			}
+			else if (IO_UserData % 10 == 2) {
+				cout << "DOWN" << endl;
+			}
+			else {
+				cout << "ERROR (outside print first prompt)" << endl;
+			}
+			fflush(stdout);
+			MOVE_CURSOR(0,58);
+			cout << str_Admin_MainInstructions << endl;
+			fflush(stdout);
+			IO_mutex->Signal();
+			break;
+
+		case IO_state_Inside_PrintFirstPrompt: //restates the received elevator number, ask for target floor number.
+			break;
+
+		case IO_state_Inside_WaitForSecondButton: //waiting for user input of desired floor number.
+			break;
+
+		case IO_state_Inside_PrintSecondPrompt: //restates the received desired floor number
+			break;
+
+		case IO_state_DisplayTwoSeconds: //displays the completed instruction for two seconds before returning to main menu
+			break;
+
+		case IO_state_Admin_PrintFirstPrompt: //prints first prompt of ADMIN
+			break;
+
+		case IO_state_PrintReceivedWrongCommand: //tells the user that a wrong command has been received.
+			break;
+
+		case IO_state_PipeToDispatcher:
+			break;
+
+		default: //waits for first character
+
+			if (TEST_FOR_KEYBOARD() != 0) {
+				KeyData = getch() ;					// read next character from keyboard
+
+				if (KeyData == 'x') {
+					state = IO_state_Admin_PrintFirstPrompt;
+				}
+
+				else if (KeyData == 'u' || KeyData == 'd') {
+					state = IO_state_Outside_PrintFirstPrompt;
+				}
+
+				else if (unsigned int((KeyData) -'1') < 9) {
+					state = IO_state_Inside_PrintFirstPrompt;
+				}
+
+				else {
+					state = IO_state_PrintReceivedWrongCommand;
+				}
+
+			}
+			break;
 
 
 
