@@ -22,7 +22,7 @@ private:
 	int Fxn1(void *threaddata1) {
 		//Testing.
 		for (int i = 0; i < 3; i++) {
-			printf("this is Fxn1  -> %d <- \n", myNumber) ;
+			//printf("this is Fxn1  -> %d <- \n", myNumber) ;
 			Sleep(5);
 		}
 		return 0;
@@ -31,7 +31,7 @@ private:
 	int Fxn2(void *threaddata1) {
 		//Testing.
 		for (int i = 0; i < 3; i++) {
-			printf("this is Fxn2  -> %d <- -> %d <-\n", rand()%100 + 100, myNumber ) ;
+			//printf("this is Fxn2  -> %d <- -> %d <-\n", rand()%100 + 100, myNumber ) ;
 			Sleep(5);
 		}
 		return 0;

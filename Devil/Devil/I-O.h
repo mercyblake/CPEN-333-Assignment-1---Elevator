@@ -45,8 +45,12 @@ using namespace std;
 #define IO_state_Inside_PrintSecondPrompt 7 //restates the received desired floor number
 #define IO_state_DisplayTwoSeconds 8 //displays the completed instruction for two seconds before returning to main menu
 #define IO_state_Admin_PrintFirstPrompt 9 //prints first prompt of ADMIN
-#define IO_state_PrintReceivedWrongCommand 10 //tells the user that a wrong command has been received.
-#define IO_state_PipeToDispatcher 11
+#define IO_state_Admin_WaitForSecondButton 10
+#define IO_state_Admin_PrintSecondPrompt 11
+#define IO_state_PrintReceivedWrongCommand 12 //tells the user that a wrong command has been received.
+#define IO_state_PipeToDispatcher 13
+#define IO_state_PrintElevatorDoesNotExist 14
+
 
 #endif
 
