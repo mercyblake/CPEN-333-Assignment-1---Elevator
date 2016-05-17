@@ -1,20 +1,13 @@
-﻿Build started 2016-05-08 8:55:32 PM.
+﻿Build started 2016-05-16 5:24:27 PM.
      1>Project "T:\Take\Y4\CPEN 333\Assignment 1 - Elevator\CPEN-333-Assignment-1---Elevator\CPEN-333-Assignment-1---Elevator\Devil\Devil\Devil.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Devil.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
-       ManifestResourceCompile:
-         All outputs are up-to-date.
-       Link:
-         All outputs are up-to-date.
-       Manifest:
-         All outputs are up-to-date.
-       FinalizeBuildStatus:
-         Deleting file "Debug\Devil.unsuccessfulbuild".
-         Touching "Debug\Devil.lastbuildstate".
-     1>Done Building Project "T:\Take\Y4\CPEN 333\Assignment 1 - Elevator\CPEN-333-Assignment-1---Elevator\CPEN-333-Assignment-1---Elevator\Devil\Devil\Devil.vcxproj" (build target(s)).
+         T:\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt "I-O.cpp"
+         I-O.cpp
+     1>t:\take\y4\cpen 333\assignment 1 - elevator\cpen-333-assignment-1---elevator\cpen-333-assignment-1---elevator\devil\devil\monitorupdate_activeclass.h(13): error C2864: 'MonitorUpdate::elevatorStatus_Local' : only static const integral data members can be initialized within a class
+     1>Done Building Project "T:\Take\Y4\CPEN 333\Assignment 1 - Elevator\CPEN-333-Assignment-1---Elevator\CPEN-333-Assignment-1---Elevator\Devil\Devil\Devil.vcxproj" (build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:00.03
+Time Elapsed 00:00:00.63

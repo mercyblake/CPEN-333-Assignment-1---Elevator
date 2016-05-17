@@ -47,8 +47,8 @@ private:
 	/*--------------------------------------------------------------------------------------------------------------*/
 	/* Initializing Mutex */
 	/*--------------------------------------------------------------------------------------------------------------*/	
-	CMutex* DISP_mutex = new CMutex ("Mutex_Monitor"); // mutex to give writing access.
-	
+	CMutex* DISP_mutex = new CMutex ("Mutex_Console"); // mutex to give writing access.
+	//requires a delete.
 	/*--------------------------------------------------------------------------------------------------------------*/
 	/* Initializing Datapools */
 	/* - Concatonates string Datapool_ with numElevator. EG: if numElevator is 3 from user input, then Datapool_0,	*/
@@ -119,7 +119,7 @@ private:
 	/* Dispatcher Logic */
 	/*--------------------------------------------------------------------------------------------------------------*/	
 
-	printf("%d rendC Dispatcher\n", rendezvousCount);
+	//printf("%d rendC Dispatcher\n", rendezvousCount);
 	DISP_r1.Wait();
 
 	/*--------------------------------------------------------------------------------------------------------------*/

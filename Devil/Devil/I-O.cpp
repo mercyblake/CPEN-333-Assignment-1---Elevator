@@ -41,14 +41,12 @@ int main() {
 	cin >> numElevator;
 	cout << "user entered: " << numElevator << endl;
 	string str_numElevator = to_string(static_cast<long long>(numElevator));
-	Elevator ** ele;
-	ele = new Elevator*[numElevator];
-	
+
 
 	/*--------------------------------------------------------------------------------------------------------------*/
 	/* Initializing Rendezvous */
 	/*--------------------------------------------------------------------------------------------------------------*/	
-	int rendezvousCount = numElevator + 2;
+	int rendezvousCount = 2*numElevator + 2;
 
 	CRendezvous	IO_r1	("Rendezvous_InitiateActiveClasses", rendezvousCount); 
 	CRendezvous IO_r2	("Rendezvous_TerminateClasses", rendezvousCount);
@@ -59,6 +57,30 @@ int main() {
 	CPipe	pipe1	("PipeIOToDispatcher", 1024) ; //defaulting to int.
 	CPipe	pipe2	("PipeDispatcherToIO", 1024) ;
 	
+
+	string IO_PipeStringBegin_IOToMU = "Pipe_IOToMU_"; // !!!is it a bad idea to start initializations after performing loops?
+	string IO_PipeStringBegin_MUToIO = "Pipe_MU_";
+	string IO_PipeStringEnd_MUToIO = "_ToIO";
+	string* IO_PipeStringArray_IOToMU_Full = new string[numElevator];
+	string* IO_PipeStringArray_MUToIO_Full = new string[numElevator];
+
+	for (int i = 0; i < numElevator ; i++) {
+		IO_PipeStringArray_IOToMU_Full[i] = IO_PipeStringBegin_IOToMU + to_string(static_cast<long long>(i));
+		IO_PipeStringArray_MUToIO_Full[i] = IO_PipeStringBegin_MUToIO + to_string(static_cast<long long>(i)) + IO_PipeStringEnd_MUToIO;
+	}
+
+	CPipe** IO_Pipe_IOToMU = new CPipe*[numElevator]; // !!! if only pointer, not double pointer, it says no constructor exists for CPipe. why?
+	CPipe** IO_Pipe_MUToIO = new CPipe*[numElevator];
+
+	for (int i = 0; i < numElevator ; i++) {
+		IO_Pipe_IOToMU[i] = new CPipe(IO_PipeStringArray_IOToMU_Full[i]); //!!! why is new CPipe here fine? 
+		IO_Pipe_MUToIO[i] = new CPipe(IO_PipeStringArray_MUToIO_Full[i]); 
+	}
+
+	delete[] IO_PipeStringArray_IOToMU_Full;
+	delete[] IO_PipeStringArray_MUToIO_Full;
+	delete[] IO_Pipe_IOToMU;
+	delete[] IO_Pipe_MUToIO;
 	CSemaphore PS_pipe1 ("PS_pipe_1", 0 , 1);
 	CSemaphore CS_pipe1 ("CS_pipe_1", 1 , 1);
 	CSemaphore PS_pipe2 ("PS_pipe_2", 0 , 1);
@@ -70,39 +92,43 @@ int main() {
 	/*--------------------------------------------------------------------------------------------------------------*/
 	/* Initializing Mutexes */
 	/*--------------------------------------------------------------------------------------------------------------*/	
-	CMutex* IO_mutex = new CMutex ("Mutex_Monitor");
-
-	///*--------------------------------------------------------------------------------------------------------------*/
-	///* Initializing Datapools */
-	///*--------------------------------------------------------------------------------------------------------------*/	
-	//string IO_DPStringBegin = "Datapool_";
-	//string* IO_DPStringArray_Full = new string[numElevator];
-	//for (int i = 0; i < numElevator ; i++) {
-	//	IO_DPStringArray_Full[i] = IO_DPStringBegin + to_string(static_cast<long long>(i));
-	//}
-
-	//CDataPool** IO_ElevatorStructArray_DataPool = new CDataPool*[numElevator];
-	//struct elevatorStatus** IO_ElevatorStructArray_Local = new elevatorStatus*[numElevator];
-	//for (int i = 0; i < numElevator ; i++) {
-	//	IO_ElevatorStructArray_DataPool[i] = new CDataPool(IO_DPStringArray_Full[i], sizeof(struct elevatorStatus));
-	//	IO_ElevatorStructArray_Local[i] = (elevatorStatus*)(IO_ElevatorStructArray_DataPool[i]->LinkDataPool()); 
-	//}
+	CMutex* IO_mutex = new CMutex ("Mutex_Console");
 
 	
 	/*--------------------------------------------------------------------------------------------------------------*/
 	/* Instantiating ActiveClasses */
 	/*--------------------------------------------------------------------------------------------------------------*/
+	
+	//Initializing Elevator
+	Elevator ** ele;
+	ele = new Elevator*[numElevator];
+	
 	for (int i = 0; i < numElevator; i++) {
 		ele[i] = new Elevator(i,rendezvousCount);
-		cout << "Creating elevator " << i << "\t" << ele[i] << "\t" << *ele << "\t" << ele << endl;
+		//cout << "Creating elevator " << i << "\t" << ele[i] << "\t" << *ele << "\t" << ele << endl;
 	}
 
+	
 	for (int i = 0; i < numElevator; i++) {
 		ele[i]->Resume();
 	}
+	//Initializing Console Update for Elevator
 
+	MonitorUpdate ** monitor = new MonitorUpdate*[numElevator];
+	
+	for (int i = 0; i < numElevator; i++) {
+		monitor[i] = new MonitorUpdate(i,rendezvousCount);
+		//cout << "Creating monitor " << i << "\t" << monitor[i] << "\t" << *monitor << "\t" << monitor << endl;
+	}
+	
+	for (int i = 0; i < numElevator; i++) {
+		monitor[i]->Resume();
+	}
+	//Initializing Dispatcher
 	Dispatcher disp(numElevator,rendezvousCount);
 	disp.Resume();
+
+	
 
 	Sleep(10);
 	
@@ -113,11 +139,72 @@ int main() {
 
 	IO_r1.Wait();
 	
-	cout << "let's go!" << endl;
+	//cout << "let's go!" << endl;
 	
 
 	/*--------------------------------------------------------------------------------------------------------------*/
-	/* IO Logic */
+	/* Elevator Grid Print */
+	/* draw a grid around |-|                                                                                                              */
+	/*--------------------------------------------------------------------------------------------------------------*/
+
+	IO_mutex -> Wait();
+	MOVE_CURSOR(0,0);
+	for (int i = 0; i < 30; i++)
+		cout << "                                                                               " << endl;
+	MOVE_CURSOR(1,0);
+	cout << "=========";
+	for (int i = 0; i < numElevator; i++)
+			cout << "=======";
+	for (int i = 0; i < 10; i++) {
+		MOVE_CURSOR(1,(i*4)+2);
+		cout << "Floor " << 9 - i << flush;
+
+		MOVE_CURSOR(1,(i*4)+4);
+		cout << "=========";
+		for (int j = 0; j < numElevator; j++)
+			cout << "=======";
+		cout << flush;
+
+		for (int j = 0; j < numElevator; j++) {
+			MOVE_CURSOR(j*7+10,i*4+1);
+			cout <<"||   ||"<<flush;
+			MOVE_CURSOR(j*7+10,i*4+2);
+			cout <<"||   ||"<<flush;
+			MOVE_CURSOR(j*7+10,i*4+3);
+			cout <<"||   ||"<<flush;
+		}
+	}
+	MOVE_CURSOR(1, 41);
+	cout << "Elevator" << flush;
+	for (int i = 1; i <= numElevator; i++) {
+		MOVE_CURSOR(i*7+6, 41);
+		cout << i;
+	}
+	
+	MOVE_CURSOR(1,44);
+	cout <<"  Inside"<< endl << " Buttons";
+	for (int i = 0; i < numElevator; i++) {
+		MOVE_CURSOR(i*7+10,42);
+		cout << " _____ ";
+		MOVE_CURSOR(i*7+10,43);
+		cout << "|7 8 9|";
+		MOVE_CURSOR(i*7+10,44);
+		cout << "|4 5 6|";
+		MOVE_CURSOR(i*7+10,45);
+		cout << "|1 2 3|";
+		MOVE_CURSOR(i*7+10,46);
+		cout << "|  0  |";
+		MOVE_CURSOR(i*7+10,47);
+		cout << "'-----'";
+	}
+	MOVE_CURSOR(0,49);
+	cout << "===============================================================================" << flush;
+
+	fflush(stdout);
+	IO_mutex -> Signal(); 
+
+	/*--------------------------------------------------------------------------------------------------------------*/
+	/* User Input Logic */
 	/* - Goal is to send all keyboard instructions to the dispatcher to decide what to do                           */
 	/* - IO has control over lines 50 to 67 of the console.															*/
 	/*--------------------------------------------------------------------------------------------------------------*/
@@ -130,74 +217,75 @@ int main() {
 	//strings
 	string str_MainInstructions = 
 		string(	
-		  "\r\nLOCATION: MAIN MENU" // 50
+		  "\r\n MAIN MENU" // 50
 	   )+
-		"\r\n\nTo control OUTSIDE of the elevators, first select the direction ('u' or 'd'), " //51, 52
+		"\r\n\n To control OUTSIDE of the elevators, first select direction 'u' or 'd', " //51, 52
 		+ 
-		  "\r\nand then select your current floor number (0 - 9). Example: u4, d3." //53
+		  "\r\n and then select your current floor number (0 - 9). Examples: u4; d3." //53
 		+ 
-		"\r\n\nTo control INSIDE of the elevator, select the elevator (1 - " 
-		+ str_numElevator +                                                "), and then desired level." //54, 55
+		  "\r\n To control elevator from INSIDE, select the elevator (1 - " //54
+		+ str_numElevator +                                              ")," 
+		  "\r\n and then desired level." //55
 		+
-		  "\r\nExample: To go to select elevator 1 to go to floor 4, input 14." //56
+		  "\r\n Example: To go to select elevator 1 to go to floor 4, input 14." //56
 		  ;
 
 	string str_OutsideElevator_DirectionSelect_Restate = 
 		string(
-		  "\r\nLOCATION: OUTSIDE ELEVATORS" //50
+		  "\r\n YOU ARE CURRENTLY: OUTSIDE ELEVATORS" //50
 		)+
-		"\r\n\nYou want to head " //51, 52 - REQUIRE ending blanks
+		"\r\n\n You want to head " //51, 52 
 			;
 	string str_OutsideElevator_FloorSelect_Prompt = 
-		"\r\n\nSelect your current floor by pressing a number between 0 - 9: "; //54
+		"\r\n\n Select your current floor by pressing a number between 0 - 9: "; //54
 	string str_OutsideElevator_FloorSelect_Restate = 
-		  "\r\nYour current floor is: "; //55 - REQUIRE ending blanks
+		  "\r\n Your current floor is: "; //55 
 	
 	string str_InsideElevator_SelectElevator_Restate = 
 		string(
-		  "\r\nLOCATION: INSIDE AN ELEVATOR" //50
+		  "\r\n YOU ARE CURRENTLY: INSIDE AN ELEVATOR" //50
 		)+
-		  "\r\nYou are inside elevator "; //51, 52 - REQUIRE ending blanks
+		"\r\n\n You are inside elevator "; //51, 52
 	string str_InsideElevator_FloorSelect_Prompt = 
-		"\r\n\nSelect the desired floor you wish to travel towards: "; //54
+		"\r\n\n Select the desired floor you wish to travel towards: "; //54
 	string str_InsideElevator_FloorSelect_Restate = 
-		  "\r\nYou want to head to floor "; //55 - REQUIRE ending blanks
+		  "\r\n You want to head to floor "; //55 
 
 	string str_Admin_MainInstructions = 
 		string(  
-		  "\r\nYou may press 'x' at any time to enter ADMIN mode, which allows you to:" // 65
+		  "\r\n You may press 'x' at any time to enter ADMIN mode, which allows you to:" // 65
 		  )+
 		  "\r\n     1. pause/continue an elevator" // 66
 		  +
 		  "\r\n     2. terminate the program."; //67
 	string str_Admin_Prompt = 
 		string(  
-		  "\r\nADMIN MODE " //50
+		  "\r\n ADMIN MODE " //50
 		)+
-		"\r\n\n1. Press 'q' to terminate the program, or" //51, 52
+		"\r\n\n 1. Press 'q' to terminate the program, or" //51, 52
 		+
-		  "\r\n2. Press a number between 1 and " 
+		  "\r\n 2. Press a number between 1 and " 
 		+ str_numElevator +                    " to freeze/resume that elevator." //53
 		+
 		"\r\n\nPress any other key to exit ADMIN mode without giving any instruction." //54,55
 		; 
 	string str_Admin_InitiatingProgramTermination = 
-		  "\r\nInitiating Program Termination...";
+		  "\r\n Initiating Program Termination...";
 	string str_Admin_HaltingOrResuming = 
-		  "\r\nYou are halting/resuming elevator: "; //52 - REQUIRE ending blanks
+		  "\r\n You are halting/resuming elevator: "; //52
 	//string str_Admin_Resuming = 
-	//	  "\r\nYou are resuming elevator: "; //52 - REQUIRE ending blanks
+	//	  "\r\nYou are resuming elevator: "; //52 
 	
 	string str_RecentInstructions = 
-		  "\r\nMost recent instruction inputs: "; //58
-	string str_WrongCommand = 
-		string(  
-		  "\r\nYou have inputed an incorrect command." //50
-		)+
-		  "\r\nYou are now returned to the main menu." //51
+		  "\r\n Most recent instruction inputs: "; //58
+	string str_WrongCommand_Line1 = 
+		  "\r\n You have inputed an incorrect command: " //50
+		  ;
+	string str_WrongCommand_Line2 =
+		  "\r\n You are now returned to the main menu." //51
 		  ;
 	string str_ElevatorDoesNotExist = 
-		  "\r\nElevator Does Not Exist. Select an elevator between 1 - " 
+		  "\r\n Elevator Does Not Exist. Select an elevator between 1 - " 
 		 + str_numElevator +                                           ".";
 
 	//string str_UserMainMenu = "\r\nPress:\n\r\t 1: Select Elevator.\n\r 9: Terminate program.";
@@ -216,8 +304,8 @@ int main() {
 
 			MOVE_CURSOR(0,50);
 			for (int i = 0; i < 11; i++)
-				cout << "                                                                               !" << endl;
-			cout <<     "                                                                               !" << flush;
+				cout << "                                                                               " << endl;
+			cout <<     "                                                                               " << flush;
 			fflush(stdout);
 
 			MOVE_CURSOR(0,50);
@@ -228,6 +316,7 @@ int main() {
 			cout <<str_Admin_MainInstructions << endl;
 			fflush(stdout);
 
+			MOVE_CURSOR(1,58);
 			IO_mutex->Signal();
 			
 			state = IO_state_MainMenu;
@@ -239,8 +328,8 @@ int main() {
 
 			MOVE_CURSOR(0,50);
 			for (int i = 0; i < 11; i++)
-				cout << "                                                                               !" << endl;
-			cout <<     "                                                                               !" << flush;
+				cout << "                                                                               " << endl;
+			cout <<     "                                                                               " << flush;
 			fflush(stdout);
 
 			MOVE_CURSOR(0,50);
@@ -291,7 +380,7 @@ int main() {
 		case IO_state_Outside_PrintSecondPrompt: //restates the received current floor number.
 
 			IO_mutex->Wait();
-			MOVE_CURSOR(0,55);
+			MOVE_CURSOR(1,55);
 			cout << str_OutsideElevator_FloorSelect_Restate << IO_UserData % 10 << flush;
 			fflush(stdout);
 
@@ -310,11 +399,11 @@ int main() {
 
 			MOVE_CURSOR(0,50);
 			for (int i = 0; i < 11; i++)
-				cout << "                                                                               !" << endl;
-			cout <<     "                                                                               !" << flush;
+				cout << "                                                                               " << endl;
+			cout <<     "                                                                               " << flush;
 			fflush(stdout);
 
-			MOVE_CURSOR(0,50);
+			MOVE_CURSOR(1,50);
 			cout << str_InsideElevator_SelectElevator_Restate << IO_UserData % 100 << str_InsideElevator_FloorSelect_Prompt << flush;
 			fflush(stdout);
 
@@ -353,7 +442,7 @@ int main() {
 		case IO_state_Inside_PrintSecondPrompt: //restates the received desired floor number
 
 			IO_mutex->Wait();
-			MOVE_CURSOR(0,55);
+			MOVE_CURSOR(1,55);
 			cout << str_InsideElevator_FloorSelect_Restate << IO_UserData % 10 << flush;
 			fflush(stdout);
 
@@ -389,11 +478,11 @@ int main() {
 
 			MOVE_CURSOR(0,50);
 			for (int i = 0; i < 17; i++)
-				cout << "                                                                               !" << endl;
-			cout <<     "                                                                               !" << flush;
+				cout << "                                                                               " << endl;
+			cout <<     "                                                                               " << flush;
 			fflush(stdout);
 
-			MOVE_CURSOR(0,50);
+			MOVE_CURSOR(1,50);
 			cout << str_Admin_Prompt << flush;
 			fflush(stdout);
 
@@ -438,11 +527,11 @@ int main() {
 
 			MOVE_CURSOR(0,52);
 			for (int i = 0; i < 5; i++)
-				cout << "                                                                               !" << endl;
-			cout <<     "                                                                               !" << flush;
+				cout << "                                                                               " << endl;
+			cout <<     "                                                                               " << flush;
 			fflush(stdout);
 
-			MOVE_CURSOR(0,52);
+			MOVE_CURSOR(1,52);
 			cout << str_Admin_HaltingOrResuming << IO_UserData % 10 << flush;
 			fflush(stdout);
 
@@ -456,12 +545,12 @@ int main() {
 
 			MOVE_CURSOR(0,50);
 			for (int i = 0; i < 11; i++)
-				cout << "                                                                               ?" << endl;
-			cout <<     "                                                                               ?" << flush;
+				cout << "                                                                               " << endl;
+			cout <<     "                                                                               " << flush;
 			fflush(stdout);
 
-			MOVE_CURSOR(0,50);
-			cout << str_WrongCommand << flush;
+			MOVE_CURSOR(1,50);
+			cout << str_WrongCommand_Line1 << KeyData << str_WrongCommand_Line2 << flush;
 			fflush(stdout);
 
 			IO_mutex -> Signal();
@@ -537,9 +626,9 @@ int main() {
 	IO_mutex -> Wait();
 
 	MOVE_CURSOR(0,52);
-	for (int i = 0; i < 5; i++)
-		cout << "                                                                               ." << endl;
-	cout <<     "                                                                               ." << flush;
+	for (int i = 0; i < 17; i++)
+		cout << "                                                                               " << endl;
+	cout <<     "                                                                               " << flush;
 	fflush(stdout);
 
 	MOVE_CURSOR(0,52);
@@ -550,88 +639,17 @@ int main() {
 	/*pipe1.Write(&IO_UserData, sizeof(int));*/
 
 
+	/*--------------------------------------------------------------------------------------------------------------*/
+	/* End Rendezvous with main thread and all ActiveClasses */
+	/*                                                                                                              */
+	/*--------------------------------------------------------------------------------------------------------------*/
+	IO_r2.Wait();
 
 
-		//	while (TEST_FOR_KEYBOARD() == 0) {}
-		//	KeyData1 = getch();
-		//	IO_mutex->Wait();
-		//	MOVE_CURSOR(0,51);
-		//	printf("second character = %c           \n", KeyData1);
-		//	printf("command entered is: %c%c        \n", KeyData, KeyData1);
-
-		//	//Command Organization.
-
-		//	if (KeyData == 'e' && KeyData1 == 'e'){
-		//		flag = FALSE;
-		//		printf("terminating. (2 seconds)                  \n   ");
-		//		Sleep(2000);
-		//	}
-		//	else if (KeyData == '-' && KeyData1 == '1') {
-		//		iKeyData = 70;
-		//		pipe1.Write(&iKeyData, sizeof(int));
-		//		printf("FREEZING Elevator 1!                            ");
-		//	}
-
-		//	else if (KeyData == '-' && KeyData1 == '2') {
-		//		iKeyData = 71;
-		//		pipe1.Write(&iKeyData, sizeof(int));
-		//		printf("FREEZING Elevator 2!                            ");
-		//	}
-
-		//	else if (KeyData == '+' && KeyData1 == '1') {
-		//		iKeyData = 75;
-		//		pipe1.Write(&iKeyData, sizeof(int));
-		//		printf("FAULT FIXED for Elevator 1!                      ");
-		//	}
-
-		//	else if (KeyData == '+' && KeyData1 == '2') {
-		//		iKeyData = 76;
-		//		pipe1.Write(&iKeyData, sizeof(int));
-		//		printf("FAULT FIXED for Elevator 2!                     ");
-		//	}
-
-		//	else if (KeyData == 'u'&& ( (KeyData1-'0') >= 0 && (KeyData1-'0') < 10 ) ) {
-		//		iKeyData = 10 + KeyData1 - '0';
-		//		pipe1.Write(&iKeyData, sizeof(int));
-		//		printf("Someone Outside Floor %d wants to go UP.       ", (KeyData1 - '0') );
-		//	}
-		//	else if (KeyData == 'd'&& ( (KeyData1-'0') >= 0 && (KeyData1-'0') < 10 )) {
-		//		iKeyData = 20 + KeyData1 - '0';
-		//		pipe1.Write(&iKeyData, sizeof(int));
-		//		printf("Someone Outside Floor %d wants to go DOWN.     ", (KeyData1 - '0') );
-		//	}
-		//	else if (KeyData == '1'&& ( (KeyData1-'0') >= 0 && (KeyData1-'0') < 10 )) {
-		//		iKeyData = 50 + KeyData1 - '0';
-		//		pipe1.Write(&iKeyData, sizeof(int));
-		//		printf("Someone Inside Elevator 1 Pressed Floor %d.    ", (KeyData1 - '0') );
-		//	}
-		//	else if (KeyData == '2'&& ( (KeyData1-'0') >= 0 && (KeyData1-'0') < 10 )) {
-		//		iKeyData = 60 + KeyData1 - '0';
-		//		pipe1.Write(&iKeyData, sizeof(int));
-		//		printf("Someone Inside Elevator 2 Pressed Floor %d.    ", (KeyData1 - '0') );
-		//	}
-		//	else{
-		//		printf("ERROR: illegible code.                         ");
-		//	}
-		//	fflush(stdout);
-		//	IO_mutex->Signal();
-		//	KeyData = '0';
-		//	KeyData1 = '0';
-		//	iKeyData = 0;
-		//}
-
-	
 	/*--------------------------------------------------------------------------------------------------------------*/
 	/* Closing Threads */
 	/*                                                                                                              */
 	/*--------------------------------------------------------------------------------------------------------------*/
-	
-	//delete[] IO_DPStringArray_Full;
-	//delete[] IO_ElevatorStructArray_Local;
-	//delete[] IO_ElevatorStructArray_DataPool;
-
-	IO_r2.Wait();
-
 	for (int k = 0; k < numElevator; k++) {
 		ele[k]->WaitForThread();
 	}
