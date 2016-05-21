@@ -55,9 +55,9 @@ private:
 		/*-------------------------------------------------------------------------------------------------------------*/
 		/* Initializing Datapools */
 		/*-------------------------------------------------------------------------------------------------------------*/	
-		string ELE_DPString = "Datapool_" + to_string(static_cast<long long>(myNumber));
+		string ELE_DP_String = "Datapool_" + to_string(static_cast<long long>(myNumber));
 
-		CDataPool ELE_ElevatorStruct_DataPool(ELE_DPString, sizeof(struct elevatorStatus));
+		CDataPool ELE_ElevatorStruct_DataPool(ELE_DP_String, sizeof(struct elevatorStatus));
 		elevatorStatus* ELE_ElevatorStruct_Local = (struct elevatorStatus*)(ELE_ElevatorStruct_DataPool.LinkDataPool());
 
 		/*-------------------------------------------------------------------------------------------------------------*/
@@ -65,16 +65,16 @@ private:
 		/*-------------------------------------------------------------------------------------------------------------*/	
 
 		CPipe ELE_Pipe_EleToDisp = "Pipe_DispatcherToEle_" + to_string(static_cast<long long>(myNumber));
-		CPipe ELE_Pipe_DisptoEle = "Pipe_Ele_" + to_string(static_cast<long long>(myNumber)) + "_ToDispatcher";
+		CPipe ELE_Pipe_DisptoEle = "Pipe_EleToDispatcher_" + to_string(static_cast<long long>(myNumber));
 
 		/*-------------------------------------------------------------------------------------------------------------*/
 		/* Initializing Semaphores - Elevators act as producers for the datapool*/
 		/*-------------------------------------------------------------------------------------------------------------*/	
 
-		string ELE_SemaphoreString_Producer = "PS_DP_" + to_string(static_cast<long long>(myNumber));
-		string ELE_SemaphoreString_Consumer = "CS_DP_" + to_string(static_cast<long long>(myNumber));
-		CSemaphore ps1 ( ELE_SemaphoreString_Producer, 0, 1 );
-		CSemaphore cs1 ( ELE_SemaphoreString_Producer, 1, 1 );
+		string ELE_Semaphore_String_Producer = "PS_DP_" + to_string(static_cast<long long>(myNumber));
+		string ELE_Semaphore_String_Consumer = "CS_DP_" + to_string(static_cast<long long>(myNumber));
+		CSemaphore ps1 ( ELE_Semaphore_String_Producer, 0, 1 );
+		CSemaphore cs1 ( ELE_Semaphore_String_Producer, 1, 1 );
 
 		/*-------------------------------------------------------------------------------------------------------------*/
 		/*  */

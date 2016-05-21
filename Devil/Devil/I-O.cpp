@@ -20,7 +20,7 @@
 
 #include "Dispatcher_ActiveClass.h"
 #include "Elevator_ActiveClass.h"
-#include "MonitorUpdate_ActiveClass.h"
+#include "DisplayUpdate_ActiveClass.h"
 
 
  
@@ -46,45 +46,49 @@ int main() {
 	/*--------------------------------------------------------------------------------------------------------------*/
 	/* Initializing Rendezvous */
 	/*--------------------------------------------------------------------------------------------------------------*/	
-	int rendezvousCount = 2*numElevator + 2;
+	int rendezvousCount = numElevator + 2;
+	int rendezvousCount2 = numElevator + 1;
 
-	CRendezvous	IO_r1	("Rendezvous_InitiateActiveClasses", rendezvousCount); 
-	CRendezvous IO_r2	("Rendezvous_TerminateClasses", rendezvousCount);
+	CRendezvous	IO_r1	("Rendezvous_InitiateActiveClasses_DispEle", rendezvousCount); 
+	CRendezvous IO_r2	("Rendezvous_TerminateClasses_DispEle", rendezvousCount);
+	
+	
+	CRendezvous IO_r1_1 ("Rendezvous_InitiateActiveClasses_DU", rendezvousCount2);
+	CRendezvous IO_r2_1 ("Rendezvous_TerminateClasses_DU", rendezvousCount2);
 
 	/*--------------------------------------------------------------------------------------------------------------*/
-	/* Initializing Pipelines, pipeline semaphores, and data storage for pipeline data*/
+	/* Initializing Pipelines, and data storage for pipeline data*/
+	/* ( originally also used pipeline semaphores, but with our one-directional 1-to-1 method, where consumption    */
+	/*   rate greatly exceeds production, there is no need.)														*/
 	/*--------------------------------------------------------------------------------------------------------------*/
 	CPipe	pipe1	("PipeIOToDispatcher", 1024) ; //defaulting to int.
 	CPipe	pipe2	("PipeDispatcherToIO", 1024) ;
 	
 
-	string IO_PipeStringBegin_IOToMU = "Pipe_IOToMU_"; // !!!is it a bad idea to start initializations after performing loops?
-	string IO_PipeStringBegin_MUToIO = "Pipe_MU_";
-	string IO_PipeStringEnd_MUToIO = "_ToIO";
-	string* IO_PipeStringArray_IOToMU_Full = new string[numElevator];
-	string* IO_PipeStringArray_MUToIO_Full = new string[numElevator];
+	string IO_Pipe_StringBegin_IOToDU = "Pipe_IOToDU_"; // !!!is it a bad idea to start initializations after performing loops?
+	string IO_Pipe_StringBegin_DUToIO = "Pipe_DUToIO_";
+	string* IO_Pipe_StringArray_Full_IOToDU = new string[numElevator];
+	string* IO_Pipe_StringArray_Full_DUToIO = new string[numElevator];
 
 	for (int i = 0; i < numElevator ; i++) {
-		IO_PipeStringArray_IOToMU_Full[i] = IO_PipeStringBegin_IOToMU + to_string(static_cast<long long>(i));
-		IO_PipeStringArray_MUToIO_Full[i] = IO_PipeStringBegin_MUToIO + to_string(static_cast<long long>(i)) + IO_PipeStringEnd_MUToIO;
+		IO_Pipe_StringArray_Full_IOToDU[i] = IO_Pipe_StringBegin_IOToDU + to_string(static_cast<long long>(i));
+		IO_Pipe_StringArray_Full_DUToIO[i] = IO_Pipe_StringBegin_DUToIO + to_string(static_cast<long long>(i));
 	}
 
-	CPipe** IO_Pipe_IOToMU = new CPipe*[numElevator]; // !!! if only pointer, not double pointer, it says no constructor exists for CPipe. why?
-	CPipe** IO_Pipe_MUToIO = new CPipe*[numElevator];
+
+	CPipe** IO_Pipe_IOToDU = new CPipe*[numElevator]; // !!! if only pointer, not double pointer, it says no constructor exists for CPipe. why?
+	CPipe** IO_Pipe_DUToIO = new CPipe*[numElevator];
 
 	for (int i = 0; i < numElevator ; i++) {
-		IO_Pipe_IOToMU[i] = new CPipe(IO_PipeStringArray_IOToMU_Full[i]); //!!! why is new CPipe here fine? 
-		IO_Pipe_MUToIO[i] = new CPipe(IO_PipeStringArray_MUToIO_Full[i]); 
+		IO_Pipe_IOToDU[i] = new CPipe(IO_Pipe_StringArray_Full_IOToDU[i], 1024); //!!! why is new CPipe here fine? 
+		IO_Pipe_DUToIO[i] = new CPipe(IO_Pipe_StringArray_Full_DUToIO[i], 1024); 
 	}
 
-	delete[] IO_PipeStringArray_IOToMU_Full;
-	delete[] IO_PipeStringArray_MUToIO_Full;
-	delete[] IO_Pipe_IOToMU;
-	delete[] IO_Pipe_MUToIO;
-	CSemaphore PS_pipe1 ("PS_pipe_1", 0 , 1);
-	CSemaphore CS_pipe1 ("CS_pipe_1", 1 , 1);
-	CSemaphore PS_pipe2 ("PS_pipe_2", 0 , 1);
-	CSemaphore CS_pipe2 ("CS_pipe_2", 1 , 1);
+	delete[] IO_Pipe_StringArray_Full_IOToDU;
+	delete[] IO_Pipe_StringArray_Full_DUToIO;
+	delete[] IO_Pipe_IOToDU;
+	delete[] IO_Pipe_DUToIO;
+
 
 	int pipe1data = 0;
 	int pipe2data = 0;
@@ -112,17 +116,17 @@ int main() {
 	for (int i = 0; i < numElevator; i++) {
 		ele[i]->Resume();
 	}
-	//Initializing Console Update for Elevator
+	//Initializing Display(console) Updates
 
-	MonitorUpdate ** monitor = new MonitorUpdate*[numElevator];
+	DisplayUpdate ** display = new DisplayUpdate*[numElevator];
 	
 	for (int i = 0; i < numElevator; i++) {
-		monitor[i] = new MonitorUpdate(i,rendezvousCount);
-		//cout << "Creating monitor " << i << "\t" << monitor[i] << "\t" << *monitor << "\t" << monitor << endl;
+		display[i] = new DisplayUpdate(i,rendezvousCount2);
+		//cout << "Creating display " << i << "\t" << display[i] << "\t" << *display << "\t" << display << endl;
 	}
 	
 	for (int i = 0; i < numElevator; i++) {
-		monitor[i]->Resume();
+		display[i]->Resume();
 	}
 	//Initializing Dispatcher
 	Dispatcher disp(numElevator,rendezvousCount);
@@ -133,13 +137,11 @@ int main() {
 	Sleep(10);
 	
 	/*--------------------------------------------------------------------------------------------------------------*/
-	/* Start Rendezvous with main thread and all ActiveClasses */
+	/* Start Rendezvous with main thread, elevators and dispatcher ActiveClasses */
 	/*                                                                                                              */
 	/*--------------------------------------------------------------------------------------------------------------*/
 
 	IO_r1.Wait();
-	
-	//cout << "let's go!" << endl;
 	
 
 	/*--------------------------------------------------------------------------------------------------------------*/
@@ -202,6 +204,13 @@ int main() {
 
 	fflush(stdout);
 	IO_mutex -> Signal(); 
+
+	/*--------------------------------------------------------------------------------------------------------------*/
+	/* Start Rendezvous with main thread and DU ActiveClasses */
+	/*                                                                                                              */
+	/*--------------------------------------------------------------------------------------------------------------*/
+
+	IO_r1_1.Wait();
 
 	/*--------------------------------------------------------------------------------------------------------------*/
 	/* User Input Logic */
@@ -640,10 +649,11 @@ int main() {
 
 
 	/*--------------------------------------------------------------------------------------------------------------*/
-	/* End Rendezvous with main thread and all ActiveClasses */
+	/* End Rendezvous with main thread and ALL ActiveClasses */
 	/*                                                                                                              */
 	/*--------------------------------------------------------------------------------------------------------------*/
 	IO_r2.Wait();
+	IO_r2_1.Wait();
 
 
 	/*--------------------------------------------------------------------------------------------------------------*/

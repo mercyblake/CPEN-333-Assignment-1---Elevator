@@ -35,7 +35,7 @@
     <ClInclude Include="Dispatcher_ActiveClass.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="MonitorUpdate_ActiveClass.h">
+    <ClInclude Include="DisplayUpdate_ActiveClass.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
